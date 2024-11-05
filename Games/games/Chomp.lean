@@ -6,7 +6,7 @@ Author: Yves Jäckle.
 
 import Games.gameLib.Stealing
 
-#exit
+
 /-
 This file describes the game of Chomp and proves that the first player has a winning strategy for it.
 The game of chomp is played on a `hight` × `length` grid-like board. At each turn, a player may select
@@ -25,9 +25,9 @@ The main concept are:
 -- # Chomp state lemmata
 
 /-- a grid-point is dominated by another if both its coordinates are smaller-/
-def domi (p q : ℕ × ℕ) : Prop := p.1 ≤ q.1 ∧ p.2 ≤ q.2
+  def domi (p q : ℕ × ℕ) : Prop := p.1 ≤ q.1 ∧ p.2 ≤ q.2
 
-def nondomi (p q : ℕ × ℕ) : Prop := ¬ domi p q
+  def nondomi (p q : ℕ × ℕ) : Prop := ¬ domi p q
 
 instance : DecidableRel domi :=
   by

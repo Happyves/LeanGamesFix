@@ -27,7 +27,7 @@ The main concepts of the file are:
 
 -/
 
-#exit
+
 
 structure pairProp {win_sets : Finset (Finset α)} (win_set : win_sets) (p : α × α) : Prop where
   dif : p.1 ≠ p.2
