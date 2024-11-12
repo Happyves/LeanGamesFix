@@ -235,9 +235,6 @@ lemma Game_World.staged_WL_of_win_state [DecidableEq β] (g : Game_World α β)
 
 
 
-
-
-
 lemma Game_World.ConwayInduction [DecidableEq β] (g : Game_World α β)
   (hgw : g.isWL) (hgp : g.playable) (hgn : g.coherent_end)
   (motive : (h : List β) → (g.hist_legal h) → Sort _)

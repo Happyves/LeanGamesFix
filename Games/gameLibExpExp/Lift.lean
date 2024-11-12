@@ -158,8 +158,7 @@ lemma Game_World.hist_legal_lift (g : Game_World α β) [Inhabited α]
 
 
 
-
-def Game_World.liftFS (g : Game_World α β) [Inhabited α] [Inhabited β]
+def Game_World.liftF (g : Game_World α β) [Inhabited α] [Inhabited β]
   [DecidablePred (g.fst_win_states)] [DecidablePred (g.snd_win_states )]
   [∀ hist, DecidablePred (g.fst_legal hist)] [∀ hist, DecidablePred (g.snd_legal hist)]
   [DecidablePred (g.lift.fst_win_states)] [DecidablePred (g.lift.snd_win_states)]
@@ -170,6 +169,30 @@ def Game_World.liftFS (g : Game_World α β) [Inhabited α] [Inhabited β]
     then
       let ⟨v, p⟩ := fs hist T (g.lift_hist_legal leg N) (g.lift_hist_neutral N)
       have : g.lift.fst_legal hist v := by
+        dsimp [lift]; rw [if_pos ⟨(g.lift_hist_legal leg N), (g.lift_hist_neutral N)⟩]; exact p
+      ⟨v,this⟩
+    else ⟨default,
+      (by dsimp [lift]
+          rw [if_neg]
+          · trivial
+          · push_neg
+            intro L
+            contrapose! N
+            exact g.hist_neutral_lift ce L N
+            )⟩
+
+
+def Game_World.liftS (g : Game_World α β) [Inhabited α] [Inhabited β]
+  [DecidablePred (g.fst_win_states)] [DecidablePred (g.snd_win_states )]
+  [∀ hist, DecidablePred (g.fst_legal hist)] [∀ hist, DecidablePred (g.snd_legal hist)]
+  [DecidablePred (g.lift.fst_win_states)] [DecidablePred (g.lift.snd_win_states)]
+  (ce : g.coherent_end)
+  (fs : g.csStrategy) : g.lift.sStrategy :=
+  fun hist T leg =>
+    if N : g.lift.hist_neutral hist
+    then
+      let ⟨v, p⟩ := fs hist T (g.lift_hist_legal leg N) (g.lift_hist_neutral N)
+      have : g.lift.snd_legal hist v := by
         dsimp [lift]; rw [if_pos ⟨(g.lift_hist_legal leg N), (g.lift_hist_neutral N)⟩]; exact p
       ⟨v,this⟩
     else ⟨default,
