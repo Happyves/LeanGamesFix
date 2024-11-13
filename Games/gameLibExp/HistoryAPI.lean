@@ -180,7 +180,7 @@ lemma Game_World.hist_on_turn_value_zero (g : Game_World α β)
     replace no := hist_on_turn_output.nonterminal.inj no
     apply Subtype.val_inj.mpr no.symm
 
-
+#exit
 
 lemma Game_World.hist_on_turn_valid_of_valid_succ (g : Game_World α β)
   [DecidablePred (g.fst_win_states)] [DecidablePred (g.snd_win_states )]

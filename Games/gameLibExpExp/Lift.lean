@@ -204,3 +204,17 @@ def Game_World.liftS (g : Game_World α β) [Inhabited α] [Inhabited β]
             contrapose! N
             exact g.hist_neutral_lift ce L N
             )⟩
+
+
+#exit
+
+lemma Game_World.lifting_strats (g : Game_World α β) [Inhabited α] [Inhabited β]
+  [DecidablePred (g.fst_win_states)] [DecidablePred (g.snd_win_states )]
+  [∀ hist, DecidablePred (g.fst_legal hist)] [∀ hist, DecidablePred (g.snd_legal hist)]
+  [DecidablePred (g.lift.fst_win_states)] [DecidablePred (g.lift.snd_win_states)]
+  (ce : g.coherent_end)
+  (P : (g : Game_World α β) → g.cfStrategy → g.csStrategy → Prop)
+  (Q : (g : Game_World α β) → g.fStrategy → g.sStrategy → Prop)
+  (main_1 : ∀ (g : Game_World α β), ∀ f :  g.cfStrategy, ∀ s : g.csStrategy,
+   Q g (g.liftF ce f) (g.liftS ce s) → P g f s)
+  (main_2 : P g ())
