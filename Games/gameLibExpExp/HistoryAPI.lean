@@ -119,3 +119,19 @@ lemma  Game_World.c_hist_on_turn_value_zero (g :  Game_World α β)
     split_ifs at no
     replace no := c_hist_on_turn_output.nonterminal.inj no
     apply Subtype.val_inj.mpr no.symm
+
+--set_option pp.all true in
+lemma Game_World.c_hist_on_turn_valid_succ (g :  Game_World α β)
+  [DecidablePred (g.fst_win_states)] [DecidablePred (g.snd_win_states )]
+  {fst_strat : g.cfStrategy} {snd_strat : g.csStrategy} {t : Nat}
+  (V : g.c_hist_on_turn_valid (g.c_hist_on_turn fst_strat snd_strat (t+1))) :
+  g.c_hist_on_turn_valid (g.c_hist_on_turn fst_strat snd_strat t) :=
+  by
+  dsimp [c_hist_on_turn] at V
+  split at V
+  · rename_i out eq
+    exfalso
+    apply g.c_hist_on_turn_valid_not_invalid fst_strat snd_strat t _ eq
+    rw [eq]
+
+  · rename_i out res eq

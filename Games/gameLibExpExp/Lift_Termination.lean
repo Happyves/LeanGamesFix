@@ -19,4 +19,5 @@ lemma Game_World.lifting_Turn_isWL (g : Game_World α β) [Inhabited α] [Inhabi
   g.c_Turn_c_isWL f s t :=
   by
   cases' main with F S
-  · use ↑(hist_on_turn (lift g) (liftF g ce f) (liftS g ce s) t)
+  · sorry
+  · sorry
