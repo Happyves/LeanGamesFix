@@ -35,6 +35,27 @@ theorem cascade (k : Nat) (hk : 1 ≤ k) :
         · sorry -- ref_4
 
 
+structure Nat.cascadeData (k : Nat) where
+  start : Nat
+  one_le_start : 1 ≤ start
+  start_le_k : start ≤ k
+  seq : Nat → Nat
+  seq_mono : StrictMonoOn seq (Finset.Icc start k)
+  seq_start : start ≤ seq start
+
+def Nat.cascadeRep (k : Nat) (cas : k.cascadeData) :=
+  ∑ i in (Finset.Icc cas.start k), (Nat.choose (cas.seq i) i)
+
+structure Nat.cascade (k m : Nat) :=
+  one_le_k : 1 ≤ k
+  one_le_m : 1 ≤ m
+  data : k.cascadeData
+  rep : m = k.cascadeRep data
+
+
+
+#exit
+
 -- # ref_3
 
 #check if_pos
