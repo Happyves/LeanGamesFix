@@ -53,7 +53,7 @@ def PGame_of_hist (ini : PGame) (hist : List (MoveType ini)) (leg : ListMoveType
 noncomputable
 def PGameI (g : PGame) : Symm_Game_World PGame (MoveType g) where
   init_game_state := g
-  fst_win_states := fun hist => Turn_snd hist.length ∧ preListMoveTypeLegal g 0 hist
+  fst_win_states := fun hist => Turn_snd hist.length ∧ preListMoveTypeLegal g 0 hist  -- maybe ∃ suffix isntead of hist directly so that it is playable ?
   snd_win_states := fun hist => Turn_snd hist.length ∧ preListMoveTypeLegal g 0 hist
   law := fun hist act => ListMoveTypeLegal g (act :: hist)
   transition := fun hist act =>
@@ -82,7 +82,7 @@ def PGame_of_hist' (ini : PGame) (hist : List (MoveType ini)) (leg : ListMoveTyp
 
 
 
-#exit
+
 
 
 lemma PGame_of_hist_prop (ini : PGame) (hist : List (MoveType ini)) (leg : ListMoveTypeLegal ini hist) :
@@ -98,8 +98,7 @@ lemma PGame_of_hist_unique (ini : PGame) (hist : List (MoveType ini)) (leg : Lis
   · cases' hG
     rw [PGame_of_hist]
     obtain ⟨G,Gdef⟩ := leg
-    cases' Gdef
-    ·
+
 
 
 
