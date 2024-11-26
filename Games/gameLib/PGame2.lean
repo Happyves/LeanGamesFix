@@ -29,16 +29,17 @@ def PGame_of_hist (ini : PGame) : List MoveType → PGame
   | [] => ini
   | (.ok type move) :: before =>
       let sofar := PGame_of_hist ini before
-      if e1 : type = sofar.LeftMoves
+      if e1 : type = sofar.LeftMoves ∧ Turn_snd (((.ok type move) :: before).length)
       then
-        sofar.moveLeft (by rw [← e1] ; exact move)
+        sofar.moveLeft (by rw [← e1.1] ; exact move)
       else
-        if e2 : type = sofar.RightMoves
+        if e2 : type = sofar.RightMoves ∧ Turn_fst (((.ok type move) :: before).length)
         then
-          sofar.moveRight (by rw [← e2] ; exact move)
+          sofar.moveRight (by rw [← e2.1] ; exact move)
         else
           0
   | .over :: _ => 0
+
 
 
 def legalLeft (ini : PGame) (hist : List MoveType) : MoveType → Prop
@@ -152,7 +153,7 @@ lemma type_right_of_turn_snd (g : PGame) (hist : List MoveType) (type : Type u) 
 #check PGame.zero_le
 
 noncomputable
-def preLeftWinStrat (g : PGame) (hg : 0 ≤ g) :
+def preLeftWinStrat (g : PGame) :
   (hist : List MoveType) → Turn_snd (hist.length +1) → (PGameI g).hist_legal hist → (∀ pre, pre <:+ hist → 0 ≤ (PGame_of_hist g pre)) →
     { act : MoveType // (PGameI g).snd_legal hist act ∧ 0 ≤ (PGame_of_hist g (act :: hist))} :=
   fun hist T leg H =>
@@ -168,20 +169,31 @@ def preLeftWinStrat (g : PGame) (hg : 0 ≤ g) :
             let nextP := Classical.choose_spec (PGame.zero_le.mp (H before (by exact List.suffix_cons (MoveType.ok type move) before)) (by rw [← R] ; exact move))
             if O : PGame_of_hist g ((.ok type move) :: before) = 0
             then -- shouldn't happen thouhgh
-              ⟨.over, And.intro (by dsimp [PGameI, PGame_of_hist] ; rw [if_pos]) (by dsimp [PGame_of_hist] ; exact zero_le_of_isEmpty_rightMoves 0)⟩
+              ⟨.over, And.intro (by dsimp [PGameI] ; rw [if_pos O]) (by dsimp [PGame_of_hist] ; exact zero_le_of_isEmpty_rightMoves 0)⟩
             else
               by
+              have help : moveRight (PGame_of_hist g before) (cast (@Eq.symm (Type _) (RightMoves (PGame_of_hist g before)) type
+                  (R.symm ▸ Eq.refl (RightMoves (PGame_of_hist g before)))) move) =
+                  PGame_of_hist g (MoveType.ok type move :: before) :=
+                    by
+                    dsimp [PGame_of_hist]
+                    rw [dif_neg (by apply not_and_of_not_right ; rw [Turn_snd_not_step, not_not] ; apply T ), dif_pos ⟨R, (by rw [Turn_fst_snd_step] ; apply T)⟩]
               refine' ⟨ MoveType.ok _ next, _, _⟩
               · dsimp [PGameI]
+                rw [if_neg O]
+                dsimp [legalLeft]
+                rw [help]
+              · unfold PGame_of_hist
+                rw [dif_pos (And.intro (by congr) (by apply T))]
+                convert nextP
+                · rw [← help]
+                  rfl
+                · dsimp
+                  apply cast_heq
 
-
-
-
-#exit
 
 
 
 def leftWinStrat (g : PGame) (hg : 0 ≤ g) : (PGameI g).sStrategy :=
   fun hist T leg =>
     let x := PGame_of_hist g hist
-    sorry
