@@ -62,64 +62,7 @@ def PGameI (g : PGame) : Game_World PGame (MoveType) where
   snd_transition := fun hist act => PGame_of_hist g (act :: hist)
 
 
--- lemma PGame_zero_cons (g : PGame) (hist : List MoveType) (act : MoveType) (leg : (PGameI g).hist_legal (act :: hist))
---   (zero : (PGame_of_hist g hist) = 0) : (PGame_of_hist g (act :: hist)) = 0 :=
---     by
---     cases' leg
---     rename_i sofar now
---     split_ifs at now
---     · dsimp [PGameI] at now
---       rw [if_pos zero] at now
---       rw [now]
---       dsimp [PGame_of_hist]
---     · dsimp [PGameI] at now
---       rw [if_pos zero] at now
---       rw [now]
---       dsimp [PGame_of_hist]
 
-
--- lemma PGame_zero_suffix (g : PGame) (pre hist : List MoveType) (suff : pre <:+ hist) (leg : (PGameI g).hist_legal (hist))
---   (zero : (PGame_of_hist g pre) = 0) : (PGame_of_hist g hist) = 0 :=
---     by
---     induction' hist with last post ih
---     · rw [List.suffix_nil] at suff
---       rw [suff] at zero
---       apply zero
---     · rw [List.suffix_cons_iff] at suff
---       cases' suff with q q
---       · rw [← q]
---         apply zero
---       · apply PGame_zero_cons _ _ _ leg
---         apply ih q
---         cases' leg
---         rename_i sofar _
---         exact sofar
-
-
--- lemma PGame_ne_zero_of_cons (g : PGame) (hist : List MoveType) (act : MoveType) (leg : (PGameI g).hist_legal (act :: hist))
---   (zero : (PGame_of_hist g (act :: hist)) ≠ 0) : (PGame_of_hist g hist) ≠ 0 :=
---     by
---     contrapose! zero
---     apply PGame_zero_cons _ _ _ leg zero
-
-
--- lemma PGame_ne_zero_of_cons_ok (g : PGame) (hist : List MoveType) (type : Type u) (move : type)
---   (leg : (PGameI g).hist_legal ((.ok type move) :: hist)) : (PGame_of_hist g hist) ≠ 0 :=
---     by
---     cases' leg
---     rename_i sofar now
---     split_ifs at now
---     · dsimp [PGameI] at now
---       split_ifs at now
---       rename_i goal
---       exact goal
---     · dsimp [PGameI] at now
---       split_ifs at now
---       rename_i goal
---       exact goal
-
-
--- #exit
 
 lemma type_left_of_turn_fst (g : PGame) (hist : List MoveType) (type : Type u) (move : type)
   (leg : (PGameI g).hist_legal ((.ok type move) :: hist)) (T : Turn_fst (((.ok type move) :: hist).length + 1)) :
@@ -229,10 +172,28 @@ def leftWinStrat (g : PGame) : (PGameI g).sStrategy :=
                 by
                 rw [not_not] at O
                 exact ⟨MoveType.ok _ (Classical.choice O),(by dsimp [PGameI] ; rw [if_neg (by rw [not_not] ; exact O)] ; dsimp [legalLeft])⟩
-                -- plan is to use a dummy move of type
-                -- (PGame_of_hist ini (MoveType.ok type move :: before)).LeftMoves
-
 
 #check Empty
 #check Nonempty
 #check Classical.choice
+
+theorem the_relations (g : PGame) :
+  0 ≤ g ↔ (PGameI g).is_snd_win :=
+  by
+  constructor
+  · sorry
+  · rintro ⟨ws,ws_prop⟩
+    rw [PGame.zero_le]
+    intro R
+    set resp := (ws [.ok g.RightMoves R] (by dsimp ; decide )
+      (by
+       apply Game_World.hist_legal.cons _ _ _ Game_World.hist_legal.nil
+       rw [if_pos (by decide)]
+       dsimp [PGameI, PGame_of_hist]
+       rw [if_neg]
+       · dsimp [legalRight, PGame_of_hist]
+       · rw [not_not]
+         use R
+       )) with resp_val
+    have resp_prop := resp.prop
+    dsimp [PGameI] at resp_prop
