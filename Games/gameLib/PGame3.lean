@@ -183,17 +183,9 @@ theorem the_relations (g : PGame) :
   constructor
   · sorry
   · rintro ⟨ws,ws_prop⟩
-    rw [PGame.zero_le]
-    intro R
-    set resp := (ws [.ok g.RightMoves R] (by dsimp ; decide )
-      (by
-       apply Game_World.hist_legal.cons _ _ _ Game_World.hist_legal.nil
-       rw [if_pos (by decide)]
-       dsimp [PGameI, PGame_of_hist]
-       rw [if_neg]
-       · dsimp [legalRight, PGame_of_hist]
-       · rw [not_not]
-         use R
-       )) with resp_val
-    have resp_prop := resp.prop
-    dsimp [PGameI] at resp_prop
+    sorry
+    /-
+    The Plan:
+    Use a first strategy on `ws_prop`. We get the fact that there exists a turn on which
+    the second predicate winning pre is satistfied, and hence a hist `pre` of
+    -/
