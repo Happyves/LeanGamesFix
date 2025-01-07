@@ -5,6 +5,7 @@ Author: Yves Jäckle.
 -/
 
 import Mathlib
+import Games.exLib.Versioning
 
 
 /-
@@ -32,6 +33,8 @@ variable (hn : n ≠ 0)
 def Opp (k : Fin n) : Fin n :=
   ⟨n - 1 - k.val, by rw [Nat.ne_zero_iff_one_le] at hn ; apply Nat.sub_lt_left_of_lt_add ; rw [Nat.le_sub_iff_add_le hn, Nat.succ_le] ; apply k.prop ; apply Nat.sub_lt_left_of_lt_add hn ; rw [← add_assoc] ; apply Nat.lt_add_of_pos_left ; exact Nat.zero_lt_one_add k⟩
 
+
+
 lemma Nat.eq_of_sub_self_eq {a b c : Nat} (ha : a ≤ c) (hb : b ≤ c) (h : c - a = c - b) : a = b := by
   induction' c with c ih
   · rw [Nat.le_zero] at * ; rw [ha,hb]
@@ -43,6 +46,9 @@ lemma Nat.eq_of_sub_self_eq {a b c : Nat} (ha : a ≤ c) (hb : b ≤ c) (h : c -
     · cases' hb with hb hb
       · rw [Nat.succ_sub hb, ha, Nat.sub_self] at h ; contradiction
       · rw [ha, hb]
+
+
+
 
 lemma Opp_inj (k q : Fin n) (h : Opp n hn k = Opp n hn q) : k = q := by
   simp_rw [Fin.eq_iff_veq, Opp] at *

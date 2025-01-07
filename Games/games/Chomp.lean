@@ -531,6 +531,7 @@ lemma preChomp_coherent_end (height length : ℕ) : (preChomp height length).coh
     exact ws
 
 
+
 -- # Chomp
 
 def Chomp (height length : ℕ) : zSymm_Game_World (Finset (ℕ × ℕ)) (ℕ × ℕ) where

@@ -189,3 +189,20 @@ theorem the_relations (g : PGame) :
     Use a first strategy on `ws_prop`. We get the fact that there exists a turn on which
     the second predicate winning pre is satistfied, and hence a hist `pre` of
     -/
+
+
+def PGame_Preds (hist : List β) (win? : List β → Prop) (legal : List β → (β → Prop)) : PGame :=
+  if win? hist
+  then 0
+  else .mk {act : β // legal hist act} {act : β // legal hist act}
+           (fun act => PGame_Preds (act.val :: hist) win? legal)
+           (fun act => PGame_Preds (act.val :: hist) win? legal)
+decreasing_by
+
+  -- init_game_state : α
+  -- fst_win_states : List β →  Prop
+  -- snd_win_states : List β → Prop
+  -- fst_legal : List β → (β → Prop)
+  -- snd_legal : List β → (β → Prop)
+  -- fst_transition : List β → β → α
+  -- snd_transition : List β → β → α

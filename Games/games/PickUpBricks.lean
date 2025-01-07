@@ -329,8 +329,8 @@ lemma PUB_terminates
 
 
 
-lemma help_1 : ¬ 3 ∣ 1 := by decide
-lemma help_2 : ¬ 3 ∣ 2 := by decide
+private lemma help_1 : ¬ 3 ∣ 1 := by decide
+private lemma help_2 : ¬ 3 ∣ 2 := by decide
 
 
 
