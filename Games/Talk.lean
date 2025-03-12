@@ -35,7 +35,11 @@ import Games.games.TTT_CombinatorialLines
 #check Game_World.fStrategy
 #check Game_World.hist_legal
 
+#check pub_win_strat
+
 #check Game
+
+#check Game.hist_on_turn
 
 #check Game_World.Turn_isWL
 
@@ -47,8 +51,6 @@ import Games.games.TTT_CombinatorialLines
 
 #check Game_World.is_fst_win
 
-
-#check pub_win_strat
 
 #check loop_invariant
 
