@@ -35,11 +35,17 @@ import Games.games.TTT_CombinatorialLines
 #check Game_World.fStrategy
 #check Game_World.hist_legal
 
-#check pub_win_strat
-
 #check Game
 
-#check Game.hist_on_turn
+#check Game_World.hist_on_turn
+
+#check pub_win_strat
+
+#check PickUpBricks_pubWin_vs_toy
+
+#eval (PickUpBricks_pubWin_vs_toy.hist_on_turn 30).val.reverse
+
+#eval (List.range 30).map (PickUpBricks_pubWin_vs_toy.state_on_turn)
 
 #check Game_World.Turn_isWL
 
@@ -51,10 +57,14 @@ import Games.games.TTT_CombinatorialLines
 
 #check Game_World.is_fst_win
 
-
 #check loop_invariant
 
 #check PUB_snd_win
+
+
+
+
+-- ### If time allows / Question time
 
 -- # Zermelo and Chomp
 
@@ -108,7 +118,7 @@ import Games.games.TTT_CombinatorialLines
 #check Chomp_is_fst_win
 
 
--- # If time allows: Tic-Tac-Toe, Positional Games, Pairing strategies
+-- # Tic-Tac-Toe, Positional Games, Pairing strategies
 
 
 #check Positional_Game_World
